@@ -6,6 +6,16 @@ import plotly.express as px
 import time
 from PIL import Image
 
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+}
+
+# Ajout du proxy et de la gestion des erreurs pour Streamlit Cloud
+proxies = {
+    "http": "http://proxy-server:port",
+    "https": "https://proxy-server:port",
+}
+
 # Configuration générale de la page
 st.set_page_config(
     page_title="Web Scraper App 🚀",
@@ -123,7 +133,7 @@ if menu == "🕵️‍♂️ Scraping":
         for page_num in range(start_page, end_page + 1):
             url1 = base_url + str(page_num)
             try:
-                response = requests.get(url1)
+                response = requests.get(url1, headers=headers, proxies=proxies)
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.content, "lxml")
                     data_table = soup.find('div', class_="listings-cards__list")
@@ -162,6 +172,7 @@ if menu == "🕵️‍♂️ Scraping":
                         st.warning(f"⚠️ Aucune donnée trouvée pour la page {page_num}.")
                 else:
                     st.error(f"Erreur pour la page {page_num}. Code : {response.status_code}")
+                    time.sleep(3)
             except Exception as e:
                 st.error(f"Erreur lors du scraping de la page {page_num} : {e}")
         return pd.DataFrame(data_all_url1)
