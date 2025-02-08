@@ -10,4 +10,4 @@ plotly
 Pillow
 seaborn
 pybase64
-
+openpyxl
