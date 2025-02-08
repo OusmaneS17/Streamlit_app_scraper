@@ -121,9 +121,18 @@ if menu == "🏠 Accueil":
 if menu == "🕵️‍♂️ Scraping":
     st.header("Scraping de Données 🕵️")
     st.image(scraping_img, caption="Extraction intelligente de données", use_container_width=True)
+    
+    # Sélection de l'URL de base
+    url_options = {
+        "Expat Dakar (Réfrigérateurs)": "https://www.expat-dakar.com/refrigerateurs-congelateurs?page=",
+        "Expat Dakar (climatisation)": "https://www.expat-dakar.com/climatisation?page=",
+        "Expat Dakar (cuisinieres)": "https://www.expat-dakar.com/cuisinieres-fours?page=",
+        "Expat Dakar (machines-a-laver)": "https://www.expat-dakar.com/machines-a-laver?page="
+    }
 
-    # URL et nombre de pages à scraper pour Expat Dakar
-    base_url = "https://www.expat-dakar.com/refrigerateurs-congelateurs?page="
+    selected_url = st.selectbox("Sélectionnez une catégorie :", list(url_options.keys()))
+    base_url = url_options[selected_url]
+    
     start_page = st.number_input("Numéro de page de départ :", min_value=1, value=2)
     end_page = st.number_input("Numéro de la dernière page :", min_value=start_page, value=6)
 
