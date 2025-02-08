@@ -92,7 +92,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Barre latérale avec images et liens
-st.sidebar.image(caption="🚀 Bienvenue dans l'app !")
+st.sidebar.image(evaluation_img,caption="🚀 Bienvenue dans l'app !")
 st.sidebar.title("📊 Web Scraper Dashboard")
 st.sidebar.markdown("Naviguez entre les sections 👇")
 
