@@ -1,0 +1,17 @@
+numpy
+bs4
+requests
+scipy
+matplotlib
+pandas
+streamlit
+seaborn
+import streamlit as st
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import plotly.express as px
+import time
+from PIL import Image
+pybase64
+
