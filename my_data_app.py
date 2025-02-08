@@ -10,11 +10,7 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 }
 
-# Ajout du proxy et de la gestion des erreurs pour Streamlit Cloud
-proxies = {
-    "http": "http://proxy-server:port",
-    "https": "https://proxy-server:port",
-}
+
 
 # Configuration générale de la page
 st.set_page_config(
@@ -133,7 +129,7 @@ if menu == "🕵️‍♂️ Scraping":
         for page_num in range(start_page, end_page + 1):
             url1 = base_url + str(page_num)
             try:
-                response = requests.get(url1, headers=headers, proxies=proxies)
+                response = requests.get(url1, headers=headers)
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.content, "lxml")
                     data_table = soup.find('div', class_="listings-cards__list")
