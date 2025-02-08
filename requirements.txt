@@ -5,8 +5,9 @@ scipy
 matplotlib
 pandas
 streamlit
-seaborn
+beautifulsoup4
 plotly
-PIL 
+Pillow
+seaborn
 pybase64
 
