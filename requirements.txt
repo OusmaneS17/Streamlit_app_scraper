@@ -1,0 +1,16 @@
+numpy
+bs4
+requests
+scipy
+matplotlib
+pandas
+streamlit
+beautifulsoup4
+plotly
+Pillow
+seaborn
+pybase64
+
+
+
+
