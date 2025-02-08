@@ -114,7 +114,14 @@ if menu == "🕵️‍♂️ Scraping":
     # URL et nombre de pages à scraper pour Expat Dakar
     base_url = "https://www.expat-dakar.com/refrigerateurs-congelateurs?page="
     start_page = st.number_input("Numéro de page de départ :", min_value=1, value=2)
-    end_page = st.number_input("Numéro de la dernière page :", min_value=start_page, value=max(start_page, 6))
+    st.write(f"Page de départ : {start_page}")
+
+    # Ajoutez cette ligne pour vérifier la valeur de start_page et éviter les erreurs
+    end_page_value = max(start_page, 6)
+    st.write(f"Valeur de fin de page : {end_page_value}")
+
+    end_page = st.number_input("Numéro de la dernière page :", min_value=start_page, value=end_page_value)
+
 
 
     # Fonction de scraping Expat Dakar
