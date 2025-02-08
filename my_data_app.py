@@ -120,7 +120,6 @@ if menu == "🏠 Accueil":
 # Configuration du menu
 if menu == "🕵️‍♂️ Scraping":
     st.header("Scraping de Données 🕵️")
-    st.image(scraping_img, caption="Extraction intelligente de données", use_container_width=True)
     
     # Sélection de l'URL de base
     url_options = {
@@ -213,7 +212,6 @@ data = pd.read_excel("data/Cleaned/Climatisation_cleaned.xlsx")
 
 if menu == "📊 Dashboard":
     st.header("Dashboard des Données des climatiseurs📊")
-    st.image("data/barometer-6550830_1280.jpg", caption="Analyse dynamique des données", use_container_width=True)
 
     if not data.empty:
 
@@ -268,7 +266,6 @@ if menu == "📊 Dashboard":
 # --- Évaluation ---
 if menu == "📝 Évaluation":
     st.header("Formulaire d'Évaluation 📝")
-    st.image(evaluation_img, caption="Donnez-nous votre avis !", use_container_width=True)
 
     note = st.slider("Quelle note donnez-vous à l'application ?", min_value=1, max_value=5, value=3)
     commentaire = st.text_area("Commentaires supplémentaires")
