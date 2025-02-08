@@ -191,7 +191,7 @@ data = pd.read_excel("data/Cleaned/Climatisation_cleaned.xlsx")
 
 if menu == "📊 Dashboard":
     st.header("Dashboard des Données des climatiseurs📊")
-    st.image(dashboard_img, caption="Analyse dynamique des données", use_column_width=True)
+    st.image("data/barometer-6550830_1280.jpg", caption="Analyse dynamique des données", use_column_width=True)
 
     if not data.empty:
 
