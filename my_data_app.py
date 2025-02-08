@@ -92,7 +92,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Barre latérale avec images et liens
-st.sidebar.image(scraping_img, caption="🚀 Bienvenue dans l'app !")
+st.sidebar.image(caption="🚀 Bienvenue dans l'app !")
 st.sidebar.title("📊 Web Scraper Dashboard")
 st.sidebar.markdown("Naviguez entre les sections 👇")
 
@@ -102,7 +102,6 @@ menu = st.sidebar.radio("Choisissez une section :", ["🏠 Accueil", "🕵️‍
 # --- Page d'accueil ---
 if menu == "🏠 Accueil":
     st.title("Bienvenue dans l'application Web Scraper 🎉")
-    st.image(scraping_img, use_container_width=True)
     st.markdown("""
     Cette application vous permet de :
     - **🔍 Scraper des données**
