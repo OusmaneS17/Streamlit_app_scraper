@@ -247,7 +247,7 @@ if menu == "📊 Dashboard":
 # --- Évaluation ---
 if menu == "📝 Évaluation":
     st.header("Formulaire d'Évaluation 📝")
-    st.image(evaluation_img, caption="Donnez-nous votre avis !", use_column_width=True)
+    st.image(evaluation_img, caption="Donnez-nous votre avis !", use_container_width=True)
 
     note = st.slider("Quelle note donnez-vous à l'application ?", min_value=1, max_value=5, value=3)
     commentaire = st.text_area("Commentaires supplémentaires")
