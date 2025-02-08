@@ -91,7 +91,7 @@ menu = st.sidebar.radio("Choisissez une section :", ["🏠 Accueil", "🕵️‍
 # --- Page d'accueil ---
 if menu == "🏠 Accueil":
     st.title("Bienvenue dans l'application Web Scraper 🎉")
-    st.image(scraping_img, use_column_width=True)
+    st.image(scraping_img, use_container_width=True)
     st.markdown("""
     Cette application vous permet de :
     - **🔍 Scraper des données**
@@ -109,7 +109,7 @@ if menu == "🏠 Accueil":
 # Configuration du menu
 if menu == "🕵️‍♂️ Scraping":
     st.header("Scraping de Données 🕵️")
-    st.image(scraping_img, caption="Extraction intelligente de données", use_column_width=True)
+    st.image(scraping_img, caption="Extraction intelligente de données", use_container_width=True)
 
     # URL et nombre de pages à scraper pour Expat Dakar
     base_url = "https://www.expat-dakar.com/refrigerateurs-congelateurs?page="
@@ -191,7 +191,7 @@ data = pd.read_excel("data/Cleaned/Climatisation_cleaned.xlsx")
 
 if menu == "📊 Dashboard":
     st.header("Dashboard des Données des climatiseurs📊")
-    st.image("data/barometer-6550830_1280.jpg", caption="Analyse dynamique des données", use_column_width=True)
+    st.image("data/barometer-6550830_1280.jpg", caption="Analyse dynamique des données", use_container_width=True)
 
     if not data.empty:
 
