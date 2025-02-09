@@ -6,17 +6,6 @@ import plotly.express as px
 import time
 from PIL import Image
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Connection": "keep-alive"
-}
-
-
-
-
-
 # Configuration générale de la page
 st.set_page_config(
     page_title="Web Scraper App 🚀",
@@ -28,7 +17,6 @@ st.set_page_config(
 # Chargement des images
 scraping_img = "https://images.unsplash.com/photo-1600703508486-75e63378fc8a"
 dashboard_img = "data/barometer-6550830_1280.jpg"
-evaluation_img = "https://cdn.pixabay.com/photo/2022/03/01/11/09/check-7044608_1280.jpg"
 
 st.markdown("""
     <style>
@@ -92,13 +80,38 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Barre latérale avec images et liens
-st.sidebar.image(evaluation_img,caption="🚀 Bienvenue dans l'app !")
+st.sidebar.image(scraping_img, caption="🚀 Bienvenue dans l'app !")
 st.sidebar.title("📊 Web Scraper Dashboard")
 st.sidebar.markdown("Naviguez entre les sections 👇")
 
 # Menu de navigation
 menu = st.sidebar.radio("Choisissez une section :", ["🏠 Accueil", "🕵️‍♂️ Scraping", "📊 Dashboard", "📝 Évaluation", "📥 Charger des Données Scrapées"])
 
+
+def nettoyer_prix(df):
+    # Supprimer la première ligne (index 0)
+    df = df.drop(index=0)
+    
+    # Liste des colonnes à supprimer
+    colonnes_a_supprimer = ['web-scraper-order', 'web-scraper-start-url', 'url', 'url-href']
+    
+    # Supprimer les colonnes
+    df.drop(columns=colonnes_a_supprimer, inplace=True, errors='ignore')  # errors='ignore' pour éviter les erreurs si certaines colonnes n'existent pas
+    df['Adresse'] = df['Adresse'].str.split(',', n=1).str[0].str.strip()
+    try:
+        # Nettoyage de la colonne 'Prix'
+        df['Prix'] = df['Prix'].str.replace(' F Cfa', '', regex=False).str.replace(' ', '', regex=False)
+        
+        # Conversion en entier, avec gestion des erreurs
+        df['Prix'] = pd.to_numeric(df['Prix'], errors='coerce')
+        
+    except Exception as e:
+        st.error(f"Erreur de nettoyage : {e}")
+        return None  # Retourner None si une erreur survient
+    
+    return df
+
+    
 # --- Page d'accueil ---
 if menu == "🏠 Accueil":
     st.title("Bienvenue dans l'application Web Scraper 🎉")
@@ -119,7 +132,7 @@ if menu == "🏠 Accueil":
 # Configuration du menu
 if menu == "🕵️‍♂️ Scraping":
     st.header("Scraping de Données 🕵️")
-    
+
     # Sélection de l'URL de base
     url_options = {
         "Expat Dakar (Réfrigérateurs)": "https://www.expat-dakar.com/refrigerateurs-congelateurs?page=",
@@ -130,10 +143,9 @@ if menu == "🕵️‍♂️ Scraping":
 
     selected_url = st.selectbox("Sélectionnez une catégorie :", list(url_options.keys()))
     base_url = url_options[selected_url]
-    
+
     start_page = st.number_input("Numéro de page de départ :", min_value=1, value=2)
     end_page = st.number_input("Numéro de la dernière page :", min_value=start_page, value=6)
-
 
     # Fonction de scraping Expat Dakar
     def scrape_data_expat_dakar(start_page, end_page):
@@ -141,7 +153,7 @@ if menu == "🕵️‍♂️ Scraping":
         for page_num in range(start_page, end_page + 1):
             url1 = base_url + str(page_num)
             try:
-                response = requests.get(url1, headers=headers)
+                response = requests.get(url1)
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.content, "lxml")
                     data_table = soup.find('div', class_="listings-cards__list")
@@ -165,6 +177,9 @@ if menu == "🕵️‍♂️ Scraping":
 
                             prix_element = listing_item.find('span', class_='listing-card__price__value')
                             prix = prix_element.text.strip() if prix_element else "N/A"
+                            
+                            image_element = soup_url1.find('img',  class_='listing-card__image__resource')
+                            image_url = image_element.get('src') if image_element else "URL principale non trouvée"
 
                             # Construction des données
                             row_data = {
@@ -172,6 +187,7 @@ if menu == "🕵️‍♂️ Scraping":
                                 "Etat": etat_frigo,
                                 "Adresse": zone,
                                 "Prix": prix,
+                                "URL": image_url,
                                 "Date Publication": date,
                                 "URL Page": url1
                             }
@@ -180,7 +196,6 @@ if menu == "🕵️‍♂️ Scraping":
                         st.warning(f"⚠️ Aucune donnée trouvée pour la page {page_num}.")
                 else:
                     st.error(f"Erreur pour la page {page_num}. Code : {response.status_code}")
-                    time.sleep(3)
             except Exception as e:
                 st.error(f"Erreur lors du scraping de la page {page_num} : {e}")
         return pd.DataFrame(data_all_url1)
@@ -211,6 +226,7 @@ data = pd.read_excel("data/Cleaned/Climatisation_cleaned.xlsx")
 
 if menu == "📊 Dashboard":
     st.header("Dashboard des Données des climatiseurs📊")
+    st.image(dashboard_img, caption="Analyse dynamique des données", use_column_width=True)
 
     if not data.empty:
 
@@ -276,6 +292,7 @@ if menu == "📝 Évaluation":
         st.write(f"Note attribuée : {note} ⭐")
         st.write(f"Commentaire : {commentaire}")
 
+    
 # Charger des Données Scrapées
 elif menu == "📥 Charger des Données Scrapées":
     st.header("📥 Charger des Données Scrapées")
@@ -283,21 +300,78 @@ elif menu == "📥 Charger des Données Scrapées":
     uploaded_file = st.file_uploader("Téléchargez votre fichier CSV :", type=["csv"])
     
     if uploaded_file is not None:
+    # Chargement du fichier dans un DataFrame
         df = pd.read_csv(uploaded_file)
         st.success("✅ Fichier chargé avec succès !")
-        st.write("Aperçu des données :")
-        st.dataframe(df)
+        df = nettoyer_prix(df)
+
+        if df is not None:
+            st.subheader("Aperçu des Données Après Nettoyage")
+            st.dataframe(df.head())  # Afficher les premières lignes après nettoyage
+        else:
+            st.error("❌ Erreur lors du nettoyage des données.")
         
-        # Option d'analyse rapide
-        if st.checkbox("Afficher une analyse rapide"):
+
+        # Section d'options d'analyse
+        st.header("⚙️ Options d'Analyse")
+        options = st.multiselect("Sélectionnez les analyses à afficher :", 
+                             ["Analyse Rapide", 
+                              "Données Manquantes", 
+                              "Distribution des Prix", 
+                              "Boxplot des Prix", 
+                              "Analyse par Adresse"])
+
+        # 1. Analyse Statistique Rapide
+        if "Analyse Rapide" in options:
+            st.subheader("Analyse Statistique Rapide")
             st.write(df.describe())
 
-        # Graphiques optionnels
-        if st.checkbox("Afficher un graphique de distribution des prix"):
-            fig = px.histogram(df, x="Prix", title="Distribution des Prix")
-            st.plotly_chart(fig, use_container_width=True)
+        # 2. Visualisation des Données Manquantes
+        if "Données Manquantes" in options:
+            st.subheader("Données Manquantes par Colonne")
+            st.write(df.isnull().sum())
+
+        # 3. Histogramme de la Distribution des Prix
+        if "Distribution des Prix" in options:
+            st.subheader("Histogramme de la Distribution des Prix")
+            if "Prix" in df.columns:
+                fig = px.histogram(df, x="Prix", nbins=20,
+                                   title="Distribution des Prix (Net)",
+                                   labels={"Prix": "Prix en F CFA"})
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.warning("La colonne 'Prix' n'est pas disponible.")
+
+        # 4. Boxplot pour visualiser la dispersion des Prix
+        if "Boxplot des Prix" in options:
+            st.subheader("Boxplot des Prix")
+            if "Prix" in df.columns:
+                fig = px.box(df, y="Prix",
+                             title="Dispersion des Prix",
+                             labels={"Prix": "Prix en F CFA"})
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.warning("La colonne 'Prix' n'est pas disponible.")
+
+        # 5. Analyse par Adresse
+        if "Analyse par Adresse" in options:
+            st.subheader("Analyse des Prix Moyens par Adresse")
+            if ("Prix" in df.columns) and ("Adresse" in df.columns):
+                # On peut nettoyer la colonne Adresse (par exemple, supprimer les retours à la ligne)
+                df["Adresse_clean"] = df["Adresse"].astype(str).str.replace("\n", " ").str.strip()
+                grouped = df.groupby("Adresse_clean")["Prix"].mean().reset_index().sort_values(by="Prix", ascending=False)
+                st.dataframe(grouped)
+                fig = px.bar(grouped, x="Adresse_clean", y="Prix",
+                             title="Prix Moyen par Adresse",
+                             labels={"Adresse_clean": "Adresse", "Prix": "Prix Moyen (F CFA)"})
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.warning("Les colonnes 'Adresse' et/ou 'Prix' ne sont pas disponibles.")
+
+        
+
     else:
-        st.info("📂 Veuillez charger un fichier CSV.")
+        st.info("📂 Veuillez charger un fichier CSV pour commencer l'analyse.")
 
 
 
