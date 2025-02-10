@@ -14,6 +14,10 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36"
+}
+
 # Chargement des images
 scraping_img = "https://images.unsplash.com/photo-1600703508486-75e63378fc8a"
 dashboard_img = "data/barometer-6550830_1280.jpg"
