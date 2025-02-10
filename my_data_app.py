@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.express as px
 import time
 from PIL import Image
+import random
 
 # Configuration générale de la page
 st.set_page_config(
