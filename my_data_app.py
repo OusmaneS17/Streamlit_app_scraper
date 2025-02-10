@@ -14,9 +14,12 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36'
-}
+UserAgents=[ 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+           ]
 
 # Chargement des images
 scraping_img = "https://images.unsplash.com/photo-1600703508486-75e63378fc8a"
@@ -158,7 +161,7 @@ if menu == "🕵️‍♂️ Scraping":
             url1 = base_url + str(page_num)
             try:
                 session = requests.Session()
-                response = session.get(url1, headers=headers)
+                response = session.get(url1, headers={'User-agent': random.choice(UserAgents)})
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.content, "html.parser")
                     data_table = soup.find('div', class_="listings-cards__list")
