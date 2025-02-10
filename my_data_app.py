@@ -182,7 +182,7 @@ if menu == "🕵️‍♂️ Scraping":
                             prix_element = listing_item.find('span', class_='listing-card__price__value')
                             prix = prix_element.text.strip() if prix_element else "N/A"
                             
-                            image_element = soup_url1.find('img',  class_='listing-card__image__resource')
+                            image_element = soup.find('img',  class_='listing-card__image__resource')
                             image_url = image_element.get('src') if image_element else "URL principale non trouvée"
 
                             # Construction des données
