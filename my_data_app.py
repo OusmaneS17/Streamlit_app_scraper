@@ -157,7 +157,8 @@ if menu == "🕵️‍♂️ Scraping":
         for page_num in range(start_page, end_page + 1):
             url1 = base_url + str(page_num)
             try:
-                response = requests.get(url1, headers=headers)
+                session = requests.Session()
+                response = session.get(url1, headers=headers)
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.content, "html.parser")
                     data_table = soup.find('div', class_="listings-cards__list")
