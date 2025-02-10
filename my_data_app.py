@@ -159,7 +159,7 @@ if menu == "🕵️‍♂️ Scraping":
             try:
                 response = requests.get(url1, headers=headers)
                 if response.status_code == 200:
-                    soup = BeautifulSoup(response.content, "lxml")
+                    soup = BeautifulSoup(response.content, "html.parser")
                     data_table = soup.find('div', class_="listings-cards__list")
 
                     if data_table:
