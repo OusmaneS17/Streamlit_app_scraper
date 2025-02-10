@@ -282,6 +282,10 @@ if menu == "📊 Dashboard":
 if menu == "📝 Évaluation":
     st.header("Formulaire d'Évaluation 📝")
 
+    # Lien vers le formulaire KoBoToolbox
+    st.markdown("### [Cliquez ici pour accéder au formulaire KoBoToolbox](https://ee.kobotoolbox.org/x/D3C8rEt8)")
+
+    
     note = st.slider("Quelle note donnez-vous à l'application ?", min_value=1, max_value=5, value=3)
     commentaire = st.text_area("Commentaires supplémentaires")
 
